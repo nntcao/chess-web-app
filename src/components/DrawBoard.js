@@ -109,13 +109,12 @@ const DrawSquare = ({ letter, number, squareStyle, chessBoard, onPieceClickHandl
       <div style={{}}>
         {numberToLetter[letter]}{number}
       </div>
-      <DrawChessPiece letter={letter} number={number} chessPiece={chessPiece} chessBoard={chessBoard}/>
+      <DrawChessPiece letter={letter} number={number} chessBoard={chessBoard}/>
     </div>
   )
 }
 
-const DrawChessPiece = ({ letter, number, chessBoard, chessPiece }) => {
-  
+const DrawChessPiece = ({ letter, number, chessBoard }) => {
   const imageDivStyle = {
     overflow: "hidden",
     position: 'absolute',
@@ -124,6 +123,8 @@ const DrawChessPiece = ({ letter, number, chessBoard, chessPiece }) => {
     minWidth: '100%',
     minHeight: '100%'
   }
+  
+  const chessPiece = chessBoard[letter][number].piece
 
   if (chessPiece.type === null) {
     if (chessBoard[letter][number].indicatorMoveHere === true) {
