@@ -103,9 +103,8 @@ const DrawColumns = ({ letter, chessBoard, onPieceClickHandler }) => {
 
 const DrawSquare = ({ letter, number, squareStyle, chessBoard, onPieceClickHandler }) => {
   const chessPiece = chessBoard[letter][number].piece
-
   return (
-    <div style={squareStyle} onClick={() => {onPieceClickHandler(chessPiece, letter, number)}}>
+    <div style={squareStyle} onClick={() => onPieceClickHandler(letter, number)}>
       <div style={{}}>
         {numberToLetter[letter]}{number}
       </div>
@@ -123,7 +122,7 @@ const DrawChessPiece = ({ letter, number, chessBoard }) => {
     minWidth: '100%',
     minHeight: '100%'
   }
-  
+
   const chessPiece = chessBoard[letter][number].piece
 
   if (chessPiece.type === null) {

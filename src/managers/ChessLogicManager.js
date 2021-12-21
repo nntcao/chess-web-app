@@ -22,14 +22,75 @@ const showPossibleMoves = (chessBoard, possibleMovesToShow, setChessBoard) => {
     return newChessBoard
 }
 
+const addPossibleMove = (chessBoard, letter, number, possibleMoves) => {
+    if (isLocationWithinBounds(letter, number)) {
+        if (!isPieceAtPosition(chessBoard, letter, number)) {
+            possibleMoves.push([letter, number])
+            return true
+        }
+    }
+    return false
+}
+
+const checkDiagonals = (chessBoard, letter, number, possibleMoves) => {
+    for (var i = 1; i <= 7; i++) {
+        if (!addPossibleMove(chessBoard, letter - i, number + i, possibleMoves)) {
+            break
+        }
+    }
+    for (var i = 1; i <= 7; i++) {
+        if (!addPossibleMove(chessBoard, letter + i, number + i, possibleMoves)) {
+            break
+        }
+    }
+    for (var i = 1; i <= 7; i++) {
+        if (!addPossibleMove(chessBoard, letter - i, number - i, possibleMoves)) {
+            break
+        }
+    }
+    for (var i = 1; i <= 7; i++) {
+        if (!addPossibleMove(chessBoard, letter + i, number - i, possibleMoves)) {
+            break
+        }
+    }
+}
+
+const getPossibleMovesKnight = (chessBoard, letter, number) => {
+    const possibleMoves = []
+    const checkPositions = [
+        [letter + 2, number - 1], [letter + 2, number + 1], 
+        [letter - 2, number - 1], [letter - 2, number + 1],
+        [letter - 1, number - 2], [letter + 1, number - 2],
+        [letter - 1, number + 2], [letter + 1, number + 2]
+    ]
+
+    for (var i = 0; i < checkPositions.length; i++) {
+        if (isLocationWithinBounds(checkPositions[i][0], checkPositions[i][1])) {
+            if (!isPieceAtPosition(chessBoard, checkPositions[i][0], checkPositions[i][1])) {
+                possibleMoves.push(checkPositions[i])
+            }
+        }
+    }
+    return possibleMoves
+}
+
+const getPossibleMovesBishop = (chessBoard, letter, number) => {
+    const possibleMoves = []
+
+    checkDiagonals(chessBoard, letter, number, possibleMoves)    
+
+    return possibleMoves
+}
+
 const getPossibleMovesKing = (chessBoard, letter, number) => {
     const possibleMoves = []
     for (var i = -1; i <= 1; i++) {
         for (var j = -1; j <= 1; j++) {
-        if (isLocationWithinBounds(letter + i, number + j)) {
-            if (!isPieceAtPosition(chessBoard, letter + i, number + j))
-            possibleMoves.push([letter + i, number + j])
-        }
+            if (isLocationWithinBounds(letter + i, number + j)) {
+                if (!isPieceAtPosition(chessBoard, letter + i, number + j)) {
+                  possibleMoves.push([letter + i, number + j])
+                }
+            }
         }
     }
     return possibleMoves 
@@ -74,5 +135,7 @@ const getPossibleMovesPawn = (chessBoard, letter, number) => {
 export default {
     showPossibleMoves,
     getPossibleMovesKing,
-    getPossibleMovesPawn
+    getPossibleMovesPawn,
+    getPossibleMovesKnight,
+    getPossibleMovesBishop
 }

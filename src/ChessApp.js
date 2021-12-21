@@ -13,17 +13,30 @@ const ChessApp = () => {
   const [squareClicked, setSquareClicked] = useState(null)
 
   const onPieceClickHandler = (letter, number) => {
+    console.log(letter);
+
     letter = parseInt(letter)
     number = parseInt(number)
 
     var newChessBoard = JSON.parse(JSON.stringify(chessBoard)) // deep clone chessBoard
+
+    console.log(letter);
+    console.log(number);
 
     const chessSquare = chessBoard[letter][number]
     const chessPiece = chessSquare.piece
 
     if (squareClicked !== null && chessSquare.indicatorMoveHere === true) {
         newChessBoard[letter][number].piece = chessBoard[squareClicked[0]][squareClicked[1]].piece
-        newChessBoard[squareClicked[0]][squareClicked[1]].piece = null
+        newChessBoard[squareClicked[0]][squareClicked[1]].piece = {
+          type: null,
+          color: null,
+        }
+
+        ChessBoardManager.clearBoard(newChessBoard)
+        
+        setChessBoard(newChessBoard)
+        setSquareClicked([letter, number])
     }
     else {
       var possibleMoves = []
@@ -35,12 +48,17 @@ const ChessApp = () => {
           break;
         case 'k':
           possibleMoves = ChessLogicManager.getPossibleMovesKing(newChessBoard, letter, number)
+          newChessBoard = ChessLogicManager.showPossibleMoves(newChessBoard, possibleMoves)
           break;
         case 'q':
           break;
         case 'b':
+          possibleMoves = ChessLogicManager.getPossibleMovesBishop(newChessBoard, letter, number)
+          newChessBoard = ChessLogicManager.showPossibleMoves(newChessBoard, possibleMoves)
           break;
         case 'n':
+          possibleMoves = ChessLogicManager.getPossibleMovesKnight(newChessBoard, letter, number)
+          newChessBoard = ChessLogicManager.showPossibleMoves(newChessBoard, possibleMoves)
           break;
         case 'r':
           break;
@@ -51,9 +69,9 @@ const ChessApp = () => {
         default:
           break;
       }
-      console.log(newChessBoard);
+      console.log(newChessBoard)
       setChessBoard(newChessBoard)
-      setSquareClicked[[letter, number]]
+      setSquareClicked([letter, number])
     }
   }
 
