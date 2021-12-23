@@ -26,52 +26,42 @@ const ChessApp = () => {
     const chessSquare = chessBoard[letter][number]
     const chessPiece = chessSquare.piece
 
+    console.log(squareClicked);
+    console.log([letter, number]);
+
     if (squareClicked !== null && chessSquare.indicatorMoveHere === true) {
         newChessBoard[letter][number].piece = chessBoard[squareClicked[0]][squareClicked[1]].piece
         newChessBoard[squareClicked[0]][squareClicked[1]].piece = {
           type: null,
-          color: null,
+          color: null
         }
-
         ChessBoardManager.clearBoard(newChessBoard)
         
+        setIsWhiteTurn(!isWhiteTurn)
         setChessBoard(newChessBoard)
-        setSquareClicked([letter, number])
+        setSquareClicked(null)
     }
-    else {
+    else if (JSON.stringify(squareClicked) === JSON.stringify([letter, number]) ) {
+      ChessBoardManager.clearBoard(newChessBoard)
+      setChessBoard(newChessBoard)
+      setSquareClicked(null)
+    }
+    else if ((isWhiteTurn && chessPiece.color === 'l') || (!isWhiteTurn && chessPiece.color === 'd')){
       var possibleMoves = []
 
       ChessBoardManager.clearBoard(newChessBoard)
       // newChessBoard[letter][number].clicked = true
-      switch (chessPiece.type) {
-        case null:
-          break;
-        case 'k':
-          possibleMoves = ChessLogicManager.getPossibleMovesKing(newChessBoard, letter, number)
-          newChessBoard = ChessLogicManager.showPossibleMoves(newChessBoard, possibleMoves)
-          break;
-        case 'q':
-          break;
-        case 'b':
-          possibleMoves = ChessLogicManager.getPossibleMovesBishop(newChessBoard, letter, number)
-          newChessBoard = ChessLogicManager.showPossibleMoves(newChessBoard, possibleMoves)
-          break;
-        case 'n':
-          possibleMoves = ChessLogicManager.getPossibleMovesKnight(newChessBoard, letter, number)
-          newChessBoard = ChessLogicManager.showPossibleMoves(newChessBoard, possibleMoves)
-          break;
-        case 'r':
-          break;
-        case 'p':
-          possibleMoves = ChessLogicManager.getPossibleMovesPawn(newChessBoard, letter, number)
-          newChessBoard = ChessLogicManager.showPossibleMoves(newChessBoard, possibleMoves)
-          break;
-        default:
-          break;
-      }
-      console.log(newChessBoard)
+      possibleMoves = ChessLogicManager.getPossibleMoves(newChessBoard, letter, number)
+      newChessBoard = ChessLogicManager.showPossibleMoves(newChessBoard, possibleMoves)
+      // console.log(newChessBoard)
       setChessBoard(newChessBoard)
       setSquareClicked([letter, number])
+    }
+    else if (squareClicked !== null) {
+      console.log('clickedaskljhd');
+      ChessBoardManager.clearBoard(newChessBoard)
+      setChessBoard(newChessBoard)
+      setSquareClicked(null)
     }
   }
 
